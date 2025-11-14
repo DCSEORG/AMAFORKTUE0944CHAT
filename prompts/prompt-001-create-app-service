@@ -1,1 +1,2 @@
 create the bicep code needed to deploy an app service instance to azure on alow cost development SKU in UKSOUTH
+enable managed identity so it can talk to azure sql
