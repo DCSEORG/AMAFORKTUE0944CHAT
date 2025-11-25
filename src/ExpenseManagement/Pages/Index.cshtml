@@ -1,0 +1,71 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["ActivePage"] = "Dashboard";
+}
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Expense Dashboard</h1>
+        <a href="/NewExpense" class="btn btn-primary">+ New Expense</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Expenses</div>
+            <div class="stat-value">@Model.Stats.TotalExpenses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Pending Approvals</div>
+            <div class="stat-value">@Model.Stats.PendingApprovals</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Approved Amount</div>
+            <div class="stat-value">£@Model.Stats.ApprovedAmountGBP.ToString("N2")</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Approved Count</div>
+            <div class="stat-value">@Model.Stats.ApprovedCount</div>
+        </div>
+    </div>
+
+    <div class="recent-expenses-section">
+        <div class="section-header">
+            <h2>Recent Expenses</h2>
+            <a href="/Expenses" class="btn btn-secondary">View All</a>
+        </div>
+        
+        <div class="expenses-table-container">
+            <table class="expenses-table">
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>EMPLOYEE</th>
+                        <th>CATEGORY</th>
+                        <th>AMOUNT</th>
+                        <th>STATUS</th>
+                        <th>DESCRIPTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var expense in Model.RecentExpenses)
+                    {
+                        <tr>
+                            <td>@expense.ExpenseDate.ToString("dd MMM yyyy")</td>
+                            <td>@expense.UserName</td>
+                            <td>@expense.CategoryName</td>
+                            <td>£@expense.AmountGBP.ToString("N2")</td>
+                            <td>
+                                <span class="status-badge status-@expense.StatusName.ToLower()">
+                                    @expense.StatusName.ToUpper()
+                                </span>
+                            </td>
+                            <td>@expense.Description</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

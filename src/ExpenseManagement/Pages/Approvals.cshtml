@@ -1,0 +1,68 @@
+@page
+@model ApprovalsModel
+@{
+    ViewData["Title"] = "Approvals";
+    ViewData["ActivePage"] = "Approvals";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Approve Expenses</h1>
+    </div>
+
+    <p class="page-subtitle">Pending expenses:</p>
+
+    <div class="filter-bar">
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label for="searchTerm">Filter:</label>
+                <input type="text" id="searchTerm" name="searchTerm" value="@Model.SearchTerm" placeholder="Search..." />
+            </div>
+            <button type="submit" class="btn btn-secondary">Filter</button>
+        </form>
+    </div>
+
+    <div class="expenses-table-container">
+        <table class="expenses-table">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>EMPLOYEE</th>
+                    <th>CATEGORY</th>
+                    <th>AMOUNT</th>
+                    <th>DESCRIPTION</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.PendingExpenses.Any())
+                {
+                    @foreach (var expense in Model.PendingExpenses)
+                    {
+                        <tr>
+                            <td>@expense.ExpenseDate.ToString("dd/MM/yyyy")</td>
+                            <td>@expense.UserName</td>
+                            <td>@expense.CategoryName</td>
+                            <td>£@expense.AmountGBP.ToString("N2")</td>
+                            <td>@expense.Description</td>
+                            <td class="actions-cell">
+                                <form method="post" asp-page-handler="Approve" asp-route-id="@expense.ExpenseId" style="display:inline;">
+                                    <button type="submit" class="btn btn-small btn-success">Approve</button>
+                                </form>
+                                <form method="post" asp-page-handler="Reject" asp-route-id="@expense.ExpenseId" style="display:inline;">
+                                    <button type="submit" class="btn btn-small btn-danger">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No pending expenses to approve.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

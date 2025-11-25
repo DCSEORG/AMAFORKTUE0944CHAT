@@ -1,0 +1,87 @@
+@page
+@model ExpensesModel
+@{
+    ViewData["Title"] = "Expenses";
+    ViewData["ActivePage"] = "Expenses";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Expenses</h1>
+        <a href="/NewExpense" class="btn btn-primary">+ New Expense</a>
+    </div>
+
+    <div class="filter-bar">
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label for="searchTerm">Search:</label>
+                <input type="text" id="searchTerm" name="searchTerm" value="@Model.SearchTerm" placeholder="Search expenses..." />
+            </div>
+            <div class="filter-group">
+                <label for="statusId">Status:</label>
+                <select id="statusId" name="statusId">
+                    <option value="">All Statuses</option>
+                    @foreach (var status in Model.Statuses)
+                    {
+                        <option value="@status.StatusId" selected="@(Model.StatusId == status.StatusId)">@status.StatusName</option>
+                    }
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="categoryId">Category:</label>
+                <select id="categoryId" name="categoryId">
+                    <option value="">All Categories</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.CategoryId" selected="@(Model.CategoryId == category.CategoryId)">@category.CategoryName</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-secondary">Filter</button>
+        </form>
+    </div>
+
+    <div class="expenses-table-container">
+        <table class="expenses-table">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>EMPLOYEE</th>
+                    <th>CATEGORY</th>
+                    <th>AMOUNT</th>
+                    <th>STATUS</th>
+                    <th>DESCRIPTION</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var expense in Model.Expenses)
+                {
+                    <tr>
+                        <td>@expense.ExpenseDate.ToString("dd MMM yyyy")</td>
+                        <td>@expense.UserName</td>
+                        <td>@expense.CategoryName</td>
+                        <td>£@expense.AmountGBP.ToString("N2")</td>
+                        <td>
+                            <span class="status-badge status-@expense.StatusName.ToLower()">
+                                @expense.StatusName.ToUpper()
+                            </span>
+                        </td>
+                        <td>@expense.Description</td>
+                        <td class="actions-cell">
+                            @if (expense.StatusName == "Draft")
+                            {
+                                <form method="post" asp-page-handler="Submit" asp-route-id="@expense.ExpenseId" style="display:inline;">
+                                    <button type="submit" class="btn btn-small btn-primary">Submit</button>
+                                </form>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@expense.ExpenseId" style="display:inline;">
+                                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
