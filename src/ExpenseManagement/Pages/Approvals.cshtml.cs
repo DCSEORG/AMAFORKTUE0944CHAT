@@ -7,6 +7,9 @@ namespace ExpenseManagement.Pages;
 
 public class ApprovalsModel : PageModel
 {
+    // Demo user ID - in production, this would come from authentication context
+    private const int DefaultManagerUserId = 2;
+    
     private readonly IExpenseService _expenseService;
 
     public List<Expense> PendingExpenses { get; set; } = new();
@@ -26,15 +29,13 @@ public class ApprovalsModel : PageModel
 
     public async Task<IActionResult> OnPostApproveAsync(int id)
     {
-        // Default to manager user ID 2 for demo
-        await _expenseService.ApproveExpenseAsync(id, 2);
+        await _expenseService.ApproveExpenseAsync(id, DefaultManagerUserId);
         return RedirectToPage();
     }
 
     public async Task<IActionResult> OnPostRejectAsync(int id)
     {
-        // Default to manager user ID 2 for demo
-        await _expenseService.RejectExpenseAsync(id, 2);
+        await _expenseService.RejectExpenseAsync(id, DefaultManagerUserId);
         return RedirectToPage();
     }
 }

@@ -15,6 +15,10 @@ public interface IChatService
 
 public class ChatService : IChatService
 {
+    // Demo user IDs - in production, these would come from authentication context
+    private const int DefaultEmployeeUserId = 1;
+    private const int DefaultManagerUserId = 2;
+    
     private readonly IConfiguration _configuration;
     private readonly IExpenseService _expenseService;
     private readonly ILogger<ChatService> _logger;
@@ -265,7 +269,7 @@ public class ChatService : IChatService
                     
                     var newExpense = await _expenseService.CreateExpenseAsync(new CreateExpenseRequest
                     {
-                        UserId = 1, // Default to first user
+                        UserId = DefaultEmployeeUserId,
                         CategoryId = category.CategoryId,
                         Amount = createArgs.Amount,
                         ExpenseDate = DateTime.Parse(createArgs.Date),
@@ -278,13 +282,13 @@ public class ChatService : IChatService
                 case "approve_expense":
                     var approveArgs = JsonSerializer.Deserialize<ExpenseIdArgs>(arguments);
                     if (approveArgs == null) return "Error: Invalid arguments";
-                    var approved = await _expenseService.ApproveExpenseAsync(approveArgs.ExpenseId, 2); // Manager ID
+                    var approved = await _expenseService.ApproveExpenseAsync(approveArgs.ExpenseId, DefaultManagerUserId);
                     return approved ? "Expense approved successfully" : "Failed to approve expense";
 
                 case "reject_expense":
                     var rejectArgs = JsonSerializer.Deserialize<ExpenseIdArgs>(arguments);
                     if (rejectArgs == null) return "Error: Invalid arguments";
-                    var rejected = await _expenseService.RejectExpenseAsync(rejectArgs.ExpenseId, 2);
+                    var rejected = await _expenseService.RejectExpenseAsync(rejectArgs.ExpenseId, DefaultManagerUserId);
                     return rejected ? "Expense rejected successfully" : "Failed to reject expense";
 
                 default:

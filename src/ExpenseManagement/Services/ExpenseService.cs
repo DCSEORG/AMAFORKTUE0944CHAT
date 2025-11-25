@@ -1,6 +1,7 @@
 using ExpenseManagement.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace ExpenseManagement.Services;
 
@@ -45,13 +46,13 @@ public class ExpenseService : IExpenseService
         _logger = logger;
     }
 
-    private void SetError(Exception ex, string file, int line)
+    private void SetError(Exception ex, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
     {
         UseDummyData = true;
         LastError = _databaseService.LastError ?? ex.Message;
-        LastErrorFile = file;
+        LastErrorFile = Path.GetFileName(file);
         LastErrorLine = line;
-        _logger.LogError(ex, "Database error in {File}:{Line}: {Message}", file, line, ex.Message);
+        _logger.LogError(ex, "Database error in {File}:{Line}: {Message}", LastErrorFile, line, ex.Message);
     }
 
     public async Task<List<Expense>> GetExpensesAsync(int? userId = null, int? statusId = null, int? categoryId = null, string? searchTerm = null)
@@ -78,7 +79,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 73);
+            SetError(ex);
             return GetDummyExpenses();
         }
     }
@@ -102,7 +103,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 96);
+            SetError(ex);
             return GetDummyExpenses().FirstOrDefault(e => e.ExpenseId == expenseId);
         }
     }
@@ -126,7 +127,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 121);
+            SetError(ex);
             return -1;
         }
     }
@@ -150,7 +151,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 145);
+            SetError(ex);
             return false;
         }
     }
@@ -170,7 +171,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 164);
+            SetError(ex);
             return false;
         }
     }
@@ -190,7 +191,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 183);
+            SetError(ex);
             return false;
         }
     }
@@ -211,7 +212,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 203);
+            SetError(ex);
             return false;
         }
     }
@@ -232,7 +233,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 223);
+            SetError(ex);
             return false;
         }
     }
@@ -258,7 +259,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 248);
+            SetError(ex);
             return GetDummyExpenses().Where(e => e.StatusName == "Submitted").ToList();
         }
     }
@@ -288,7 +289,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 279);
+            SetError(ex);
             return GetDummyCategories();
         }
     }
@@ -317,7 +318,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 308);
+            SetError(ex);
             return GetDummyStatuses();
         }
     }
@@ -342,7 +343,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 333);
+            SetError(ex);
             return GetDummyUsers();
         }
     }
@@ -366,7 +367,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 356);
+            SetError(ex);
             return GetDummyUsers().FirstOrDefault(u => u.UserId == userId);
         }
     }
@@ -400,7 +401,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 389);
+            SetError(ex);
             return GetDummyUsers().Where(u => u.RoleName == "Manager").ToList();
         }
     }
@@ -429,7 +430,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 417);
+            SetError(ex);
             return GetDummyStats();
         }
     }
@@ -455,7 +456,7 @@ public class ExpenseService : IExpenseService
         }
         catch (Exception ex)
         {
-            SetError(ex, "Services/ExpenseService.cs", 442);
+            SetError(ex);
             return GetDummyExpenses().Take(topCount).ToList();
         }
     }

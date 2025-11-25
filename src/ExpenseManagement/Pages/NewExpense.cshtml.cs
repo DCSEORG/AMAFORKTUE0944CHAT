@@ -7,6 +7,9 @@ namespace ExpenseManagement.Pages;
 
 public class NewExpenseModel : PageModel
 {
+    // Demo user ID - in production, this would come from authentication context
+    private const int DefaultEmployeeUserId = 1;
+    
     private readonly IExpenseService _expenseService;
 
     public List<ExpenseCategory> Categories { get; set; } = new();
@@ -52,7 +55,7 @@ public class NewExpenseModel : PageModel
 
         var request = new CreateExpenseRequest
         {
-            UserId = 1, // Default to first user for demo
+            UserId = DefaultEmployeeUserId,
             CategoryId = CategoryId,
             Amount = Amount,
             ExpenseDate = ExpenseDate,
