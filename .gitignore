@@ -1,0 +1,41 @@
+# .NET
+bin/
+obj/
+publish/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+.vs/
+
+# Node
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+venv/
+
+# Backup files created by sed
+*.bak
+
+# Do NOT ignore .zip files - we need app.zip for deployment
+# !app.zip
